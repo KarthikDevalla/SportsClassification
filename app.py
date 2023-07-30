@@ -1,9 +1,12 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import cv2
-
+from flask import Flask, render_template, request
+import tensorflow
+import os
 from keras.models import load_model
-
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.imagenet_utils import preprocess_input
+import numpy as np
+from werkzeug.utils import secure_filename
+app = Flask(__name__)
 
 class_names=['air hockey',
  'ampute football',
@@ -107,15 +110,40 @@ class_names=['air hockey',
  'wingsuit flying']
 class_names=[i.title() for i in class_names]
 
+@app.route('/',methods=['GET'])
+def index():
+    return render_template('webpage.html')
+
 MODEL=load_model('sportclass_model.h5')
-def predictor(image_name):
-    img_data=cv2.imread(image_name)
-    resize_image=cv2.resize(img_data, (224,224))
-    img_data=resize_image/255.0
-    img_data=np.expand_dims(img_data, axis=0)
-    pred=MODEL.predict(img_data)
+
+def predict_class(img_path):
+    img = image.load_img(img_path, target_size=(224, 224))
+    x = image.img_to_array(img)
+    x=x/255
+    x = np.expand_dims(x, axis=0)
+    # x = preprocess_input(x)
+    pred=MODEL.predict(x)
     predicted_sport=class_names[np.argmax(pred[0])]
     return predicted_sport
-    
-print(predictor('fifa.jpg'))
 
+@app.route('/predict',methods=['GET','POST'])
+def predict():
+    if request.method == 'POST':
+        # Get the file from post request
+        f = request.files['file']
+
+        # Save the file to ./uploads
+        basepath = os.path.dirname(__file__)
+        file_path = os.path.join(
+            basepath, 'uploads', secure_filename(f.filename))
+        f.save(file_path)
+
+        # Make prediction
+        preds = predict_class(file_path)
+        result=preds
+        return result
+    return None
+
+    
+if __name__ == '__main__':
+    app.run(debug=True)
