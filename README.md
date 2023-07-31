@@ -23,3 +23,6 @@ python app.py
 ## Dataset Courtesy
 [Kaggle](https://www.kaggle.com/datasets/gpiosenka/sports-classification)
 
+## Webpage template courtesy
+[Krish Naik](https://github.com/krishnaik06)
+
