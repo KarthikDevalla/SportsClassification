@@ -20,6 +20,7 @@ Start the Flask web application:
 ```shell
 python app.py
 ```
+[image](Screenshot (30).png)
 ## Dataset Courtesy
 [Kaggle](https://www.kaggle.com/datasets/gpiosenka/sports-classification)
 
