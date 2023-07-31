@@ -21,6 +21,7 @@ Start the Flask web application:
 python app.py
 ```
 This a sample picture of how the application works
+<br>
 ![image](sample.png)
 ## Dataset Courtesy
 [Kaggle](https://www.kaggle.com/datasets/gpiosenka/sports-classification)
